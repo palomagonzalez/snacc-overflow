@@ -6,9 +6,9 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import wpi.cs4518.snaccoverflow.fragments.MatchViewFragment
-import wpi.cs4518.snaccoverflow.fragments.MessageListFragment
-import wpi.cs4518.snaccoverflow.fragments.ProfileFragment
+import wpi.cs4518.snaccoverflow.fragment.MatchViewFragment
+import wpi.cs4518.snaccoverflow.fragment.MessageListFragment
+import wpi.cs4518.snaccoverflow.fragment.ProfileFragment
 
 private const val TAG = "wpi.MainActivity"
 

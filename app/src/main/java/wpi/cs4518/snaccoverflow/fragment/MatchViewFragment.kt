@@ -1,4 +1,4 @@
-package wpi.cs4518.snaccoverflow.fragments
+package wpi.cs4518.snaccoverflow.fragment
 
 import android.os.Bundle
 import android.util.Log
