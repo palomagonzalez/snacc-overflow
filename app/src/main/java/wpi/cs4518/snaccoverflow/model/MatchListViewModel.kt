@@ -19,8 +19,22 @@ class MatchListViewModel : ViewModel() {
 
     private var id = 0
 
-    fun getMatch(): LiveData<Match> {
-        return MutableLiveData(randomMatch())
+
+    private val currentMatch: MutableLiveData<Match> by lazy {
+        MutableLiveData<Match>()
+    }
+
+    fun getCurrentMatch(): LiveData<Match> {
+        return if (currentMatch.value == null) {
+            getNewMatch()
+        } else {
+            currentMatch
+        }
+    }
+
+    fun getNewMatch(): LiveData<Match> {
+        currentMatch.value = randomMatch()
+        return currentMatch
     }
 
     private fun randomMatch(): Match {
@@ -100,7 +114,8 @@ private val LANGS = listOf(
     "Racket",
     "Rust",
     "PHP",
-    "Javascript"
+    "Javascript",
+    "Swift"
 )
 private val IDES = listOf(
     "IntelliJ",

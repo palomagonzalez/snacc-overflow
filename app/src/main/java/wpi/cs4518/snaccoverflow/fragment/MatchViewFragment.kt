@@ -39,7 +39,7 @@ class MatchViewFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_match_view, container, false)
         Log.d(TAG, "Inflated")
-        loadNextMatch()
+        loadCurrentMatch()
         // setup gesture detector
         gestureDetector = GestureDetectorCompat(context, MatchGestureListener(this::onSwipeLeft, this::onSwipeRight))
         view.setOnTouchListener(object: View.OnTouchListener{
@@ -53,9 +53,19 @@ class MatchViewFragment : Fragment() {
         return view
     }
 
+    private fun loadCurrentMatch() {
+        Log.d(TAG, "Loading potential match")
+        matchListViewModel.getCurrentMatch().observe(
+            viewLifecycleOwner,
+            {
+                    match -> updateUI(match)
+            }
+        )
+    }
+
     private fun loadNextMatch() {
         Log.d(TAG, "Loading potential match")
-        matchListViewModel.getMatch().observe(
+        matchListViewModel.getNewMatch().observe(
             viewLifecycleOwner,
             {
                 match -> updateUI(match)
