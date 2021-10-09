@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
@@ -22,6 +23,10 @@ class MatchViewFragment : Fragment() {
 
     private val matchListViewModel: MatchListViewModel by viewModels()
 
+    private lateinit var gestureDetector: GestureDetectorCompat
+
+    private lateinit var toast: Toast
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +41,15 @@ class MatchViewFragment : Fragment() {
         Log.d(TAG, "Inflated")
         loadNextMatch()
         // setup gesture detector
+        gestureDetector = GestureDetectorCompat(context, MatchGestureListener(this::onSwipeLeft, this::onSwipeRight))
+        view.setOnTouchListener(object: View.OnTouchListener{
+            override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+                return gestureDetector.onTouchEvent(event)
+            }
+
+        })
+        toast = Toast(context)
+        toast.duration = Toast.LENGTH_SHORT
         return view
     }
 
@@ -60,6 +74,56 @@ class MatchViewFragment : Fragment() {
         ans1Label?.text = match.answerOne
         ans2Label?.text = match.answerTwo
         ans3Label?.text = match.answerThree
+    }
+
+    private fun onSwipeLeft() {
+        writeToast("Passed!")
+        loadNextMatch()
+    }
+
+    private fun onSwipeRight() {
+        writeToast("Matched!")
+        loadNextMatch()
+    }
+
+    private fun writeToast(text: String) {
+        toast.cancel()
+        toast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
+        toast.show()
+    }
+
+    private inner class MatchGestureListener(val onSwipeLeft:()->Unit, val onSwipeRight:()->Unit):
+        GestureDetector.SimpleOnGestureListener() {
+
+        private val SWIPE_THRESHOLD = 100
+
+        override fun onDown(event: MotionEvent): Boolean {
+            Log.d(TAG, "onDown: $event")
+            return true
+        }
+
+        override fun onFling(
+            event1: MotionEvent,
+            event2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            val dX = event2.x - event1.x
+            val dY = event2.y - event1.y
+            Log.d(TAG, "dX: $dX, dY: $dY")
+            if (dY > SWIPE_THRESHOLD || Math.abs(dX) < SWIPE_THRESHOLD) {
+                return false
+            }
+            if (dX > 0) {
+                Log.d(TAG, "Swiping Right")
+                onSwipeRight()
+            } else {
+                Log.d(TAG, "Swiping Left")
+                onSwipeLeft()
+            }
+            return true
+        }
+
     }
 
 }
