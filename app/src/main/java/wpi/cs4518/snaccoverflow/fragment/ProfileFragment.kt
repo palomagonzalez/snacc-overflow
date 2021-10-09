@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
+import wpi.cs4518.snaccoverflow.model.ProfileViewModel
 
 private const val TAG = "wpi.ProfileFragment"
 
@@ -18,6 +21,8 @@ private const val TAG = "wpi.ProfileFragment"
  * create an instance of this fragment.
  */
 class ProfileFragment : Fragment() {
+
+    private val viewModel : ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,13 @@ class ProfileFragment : Fragment() {
             val fragment = EditPreferencesFragment()
             transitionToFragment(fragment)
         }
+        // set name
+        viewModel.profile.observe(
+            viewLifecycleOwner,
+            {
+                profile -> view.findViewById<TextView>(R.id.labelProfileViewInfo).text = "${profile.name}, ${profile.age}"
+            }
+        )
         return view
     }
 

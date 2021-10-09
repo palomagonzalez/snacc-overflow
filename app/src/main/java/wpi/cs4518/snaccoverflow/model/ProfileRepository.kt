@@ -69,7 +69,7 @@ class ProfileRepository private constructor(context: Context){
         @Query("select * from profiles limit 1")
         fun loadProfile(): LiveData<Profile>
 
-        @Query("update profiles set name=:name, age=:age, answerOne=:answerOne, answerTwo=:answerTwo, answerThree=:answerThree")
+        @Query("update profiles set name=:name, age=:age, answerOne=:answerOne, answerTwo=:answerTwo, answerThree=:answerThree where id=0")
         fun saveProfile(name: String, age: Int, answerOne: String, answerTwo: String, answerThree: String)
 
     }
