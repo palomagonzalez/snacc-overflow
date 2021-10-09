@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import wpi.cs4518.snaccoverflow.fragment.MatchViewFragment
 import wpi.cs4518.snaccoverflow.fragment.MessageListFragment
 import wpi.cs4518.snaccoverflow.fragment.ProfileFragment
+import wpi.cs4518.snaccoverflow.model.ProfileRepository
 
 private const val TAG = "wpi.MainActivity"
 
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        ProfileRepository.init(this)
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
@@ -27,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             setCurrentFragment(matchViewFragment)
         }
 
-        findViewById<BottomNavigationView>(R.id.nav_bar).setOnItemSelectedListener {
+        findViewById<BottomNavigationView>(R.id.nav_bar).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.matchView -> setCurrentFragment(matchViewFragment)
                 R.id.messageListView -> setCurrentFragment(messageListFragment)
