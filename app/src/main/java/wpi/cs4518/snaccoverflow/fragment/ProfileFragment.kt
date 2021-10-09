@@ -15,6 +15,8 @@ import wpi.cs4518.snaccoverflow.model.ProfileViewModel
 
 private const val TAG = "wpi.ProfileFragment"
 
+// TODO: load profile picture
+
 /**
  * A simple [Fragment] subclass.
  * Use the [ProfileFragment.newInstance] factory method to

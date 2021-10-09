@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
 import wpi.cs4518.snaccoverflow.model.Profile
@@ -17,6 +18,9 @@ import wpi.cs4518.snaccoverflow.model.ProfileViewModel
 import java.lang.NumberFormatException
 
 private const val TAG = "wpi.EditProfile"
+
+// TODO: make gps location appear
+// TODO: make camera function
 
 /**
  * A simple [Fragment] subclass.
@@ -48,6 +52,7 @@ class EditProfileFragment : Fragment() {
         Thread {
             viewModel.save()
         }.start()
+        Toast.makeText(context, "Saved Profile!", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupEditTextHandlers(view: View) {
