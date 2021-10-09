@@ -1,11 +1,13 @@
 package wpi.cs4518.snaccoverflow.model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import java.lang.IllegalStateException
 
 private const val DATABASE_NAME = "profile-database"
+private const val TAG = "wpi.ProfileRepository"
 
 class ProfileRepository private constructor(context: Context){
 
@@ -21,6 +23,7 @@ class ProfileRepository private constructor(context: Context){
         if (!dao.doesProfileExist()) {
             dao.setInitialProfile()
         }
+        Log.d(TAG, "Initialized")
     }
 
     fun getProfile(): LiveData<Profile> {

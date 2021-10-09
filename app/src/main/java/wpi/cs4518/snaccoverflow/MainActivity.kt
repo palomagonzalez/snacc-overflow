@@ -1,11 +1,16 @@
 package wpi.cs4518.snaccoverflow
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import wpi.cs4518.snaccoverflow.fragment.MatchViewFragment
 import wpi.cs4518.snaccoverflow.fragment.MessageListFragment
 import wpi.cs4518.snaccoverflow.fragment.ProfileFragment
@@ -17,8 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        ProfileRepository.init(this)
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
@@ -38,6 +41,11 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        val context = this
+        Thread {
+            ProfileRepository.init(context)
+        }.start()
 
         Log.d(TAG, "Created MainActivity")
     }
