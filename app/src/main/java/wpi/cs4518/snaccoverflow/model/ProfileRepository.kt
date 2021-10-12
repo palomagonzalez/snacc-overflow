@@ -56,7 +56,7 @@ class ProfileRepository private constructor(context: Context){
 
     @Database(
         entities = [Profile::class],
-        version = 5
+        version = 6
     )
     @TypeConverters(ProfileConverter::class)
     abstract class ProfileDatabase: RoomDatabase() {
@@ -78,7 +78,7 @@ class ProfileRepository private constructor(context: Context){
         fun loadProfile(): LiveData<Profile>
 
         @Query("update profiles set name=:name, age=:age, answerOne=:answerOne, answerTwo=:answerTwo, answerThree=:answerThree, profilePictureLocation=:profilePictureLocation where id=0")
-        fun saveProfile(name: String, age: Int, answerOne: String, answerTwo: String, answerThree: String, profilePictureLocation: Uri?)
+        fun saveProfile(name: String, age: Int, answerOne: String, answerTwo: String, answerThree: String, profilePictureLocation: String?)
 
     }
 

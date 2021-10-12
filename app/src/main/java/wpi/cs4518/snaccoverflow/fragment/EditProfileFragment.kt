@@ -2,6 +2,9 @@ package wpi.cs4518.snaccoverflow.fragment
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -29,6 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private const val TAG = "wpi.EditProfile"
+private const val TAKE_PROFILE_PICTURE_ID = 4562
 
 // TODO: make gps location appear
 // TODO: make camera function
@@ -70,6 +74,13 @@ class EditProfileFragment : Fragment() {
         Toast.makeText(context, "Saved Profile!", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == TAKE_PROFILE_PICTURE_ID) {
+            view?.let { setProfileImage(it, getImage(currentPhotoPath)) }
+        }
+    }
+
     private fun setupCameraButton(view: View) {
         val button =
             view.findViewById<ImageButton>(R.id.buttonTakeProfilePicture).setOnClickListener {
@@ -87,9 +98,14 @@ class EditProfileFragment : Fragment() {
                             "wpi.cs4518.snaccoverflow.fileprovider",
                             it
                         )
-                        Log.d(TAG, "$photoURI")
+                        viewModel.profile.observe(
+                            viewLifecycleOwner,
+                            {
+                                profile -> profile.profilePictureLocation = currentPhotoPath
+                            }
+                        )
                         photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(photoIntent, id)
+                        startActivityForResult(photoIntent, TAKE_PROFILE_PICTURE_ID)
                     }
                 }
             }
@@ -102,6 +118,24 @@ class EditProfileFragment : Fragment() {
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }
+    }
+
+    private fun getImage(path: String): Bitmap {
+        val exifInterface = ExifInterface(path)
+        var rotation = 0.0f;
+        val orientation = exifInterface.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90f
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotation = 180f
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotation = 270f
+        }
+        val source = BitmapFactory.decodeFile(path)
+        val matrix = Matrix()
+        matrix.postRotate(rotation)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 
     private fun setupEditTextHandlers(view: View) {
@@ -165,7 +199,9 @@ class EditProfileFragment : Fragment() {
         answerOneLabel?.setText(profile.answerOne)
         answerTwoLabel?.setText(profile.answerTwo)
         answerThreeLabel?.setText(profile.answerThree)
-
+        if (profile.profilePictureLocation != null) {
+            setProfileImage(view, getImage(profile.profilePictureLocation.toString()))
+        }
     }
 
     private fun setProfileImage(view: View, bitmap: Bitmap) {

@@ -13,7 +13,7 @@ class Profile(
     var answerOne: String,
     var answerTwo: String,
     var answerThree: String,
-    var profilePictureLocation: Uri?
+    var profilePictureLocation: String?
 ) {
     override fun toString(): String {
         return "{\n" +
