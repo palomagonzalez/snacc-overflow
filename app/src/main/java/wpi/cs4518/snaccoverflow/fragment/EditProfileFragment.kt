@@ -2,9 +2,6 @@ package wpi.cs4518.snaccoverflow.fragment
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -22,8 +19,8 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
+import wpi.cs4518.snaccoverflow.helpers.ImageUtils
 import wpi.cs4518.snaccoverflow.model.Profile
-import wpi.cs4518.snaccoverflow.model.ProfileRepository
 import wpi.cs4518.snaccoverflow.model.ProfileViewModel
 import java.io.File
 import java.io.IOException
@@ -77,7 +74,7 @@ class EditProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TAKE_PROFILE_PICTURE_ID) {
-            view?.let { setProfileImage(it, getImage(currentPhotoPath)) }
+            view?.let { setProfileImage(it, ImageUtils.getImage(currentPhotoPath)) }
         }
     }
 
@@ -118,24 +115,6 @@ class EditProfileFragment : Fragment() {
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }
-    }
-
-    private fun getImage(path: String): Bitmap {
-        val exifInterface = ExifInterface(path)
-        var rotation = 0.0f;
-        val orientation = exifInterface.getAttributeInt(
-            ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_NORMAL
-        )
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90f
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotation = 180f
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotation = 270f
-        }
-        val source = BitmapFactory.decodeFile(path)
-        val matrix = Matrix()
-        matrix.postRotate(rotation)
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 
     private fun setupEditTextHandlers(view: View) {
@@ -200,7 +179,7 @@ class EditProfileFragment : Fragment() {
         answerTwoLabel?.setText(profile.answerTwo)
         answerThreeLabel?.setText(profile.answerThree)
         if (profile.profilePictureLocation != null) {
-            setProfileImage(view, getImage(profile.profilePictureLocation.toString()))
+            setProfileImage(view, ImageUtils.getImage(profile.profilePictureLocation.toString()))
         }
     }
 
