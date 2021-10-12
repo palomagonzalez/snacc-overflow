@@ -87,12 +87,12 @@ class MatchViewFragment : Fragment() {
     }
 
     private fun onSwipeLeft() {
-        writeToast("Passed!")
+        writeToast("Red Flag")
         loadNextMatch()
     }
 
     private fun onSwipeRight() {
-        writeToast("Matched!")
+        writeToast("I Can Overlook That")
         loadNextMatch()
     }
 
