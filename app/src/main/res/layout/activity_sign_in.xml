@@ -10,11 +10,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_width="230dp"
+        android:layout_height="311dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_fire_emoji"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/snacc_overflow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
