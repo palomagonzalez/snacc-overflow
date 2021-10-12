@@ -13,6 +13,7 @@ import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.newTask
+import wpi.cs4518.snaccoverflow.util.FirestoreUtil
 
 
 class SignInActivity : AppCompatActivity() {
@@ -48,7 +49,9 @@ class SignInActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK) {
                 val progressDialog = indeterminateProgressDialog("Setting up your account")
-                //TODO init current user in Firestore
+                FirestoreUtil.initCurrentUserIfFirstTime {
+                    progressDialog.dismiss()
+                }
                 startActivity(intentFor<MainActivity>().newTask().clearTask())
                 progressDialog.dismiss()
             } else if (resultCode == Activity.RESULT_CANCELED) {
