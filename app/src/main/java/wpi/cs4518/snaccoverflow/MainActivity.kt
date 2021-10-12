@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import wpi.cs4518.snaccoverflow.fragment.MatchViewFragment
 import wpi.cs4518.snaccoverflow.fragment.MessageListFragment
+import wpi.cs4518.snaccoverflow.fragment.PeopleFragment
 import wpi.cs4518.snaccoverflow.fragment.ProfileFragment
 import wpi.cs4518.snaccoverflow.model.ProfileRepository
 
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         val profileFragment = ProfileFragment()
-        val messageListFragment = MessageListFragment()
+        val peopleFragment = PeopleFragment()
         val matchViewFragment = MatchViewFragment()
 
         if (currentFragment == null) {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<BottomNavigationView>(R.id.nav_bar).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.matchView -> setCurrentFragment(matchViewFragment)
-                R.id.messageListView -> setCurrentFragment(messageListFragment)
+                R.id.messageListView -> setCurrentFragment(peopleFragment)
                 R.id.profileView -> setCurrentFragment(profileFragment)
             }
             true

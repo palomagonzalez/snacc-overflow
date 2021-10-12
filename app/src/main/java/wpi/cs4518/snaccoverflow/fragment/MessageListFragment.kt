@@ -26,7 +26,7 @@ class MessageListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "Inflated")
-        return inflater.inflate(R.layout.fragment_message_list, container, false)
+        return inflater.inflate(R.layout.fragment_people, container, false)
     }
 
 }

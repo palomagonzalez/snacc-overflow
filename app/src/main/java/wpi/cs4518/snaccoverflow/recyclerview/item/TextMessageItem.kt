@@ -38,8 +38,7 @@ class TextMessageItem(val message: TextMessage,
                 val lParams = FrameLayout.LayoutParams(wrapContent, wrapContent, Gravity.END)
                 this.layoutParams = lParams
             }
-        }
-        else {
+        } else {
             viewHolder.message_root.apply {
                 backgroundResource = R.drawable.rect_round_primary_color
                 val lParams = FrameLayout.LayoutParams(wrapContent, wrapContent, Gravity.START)
@@ -48,22 +47,18 @@ class TextMessageItem(val message: TextMessage,
         }
     }
 
-    override fun getLayout()= R.layout.item_text_message
+    override fun getLayout() = R.layout.item_text_message
 
-//    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
-//        if (other !is TextMessageItem)
-//            return false
-//        if (this.message != other.message)
-//            return false
-//        return true
-//    }
-//
-//    override fun equals(other: Any?) {
-//        return (other as? TextMessageItem?).let {
-//            if (it != null) {
-//                isSameAs(it)
-//            }
-//        }
-//    }
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other !is TextMessageItem)
+            return false
+        if (this.message != other.message)
+            return false
+        return true
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return isSameAs(other as com.xwray.groupie.Item<*>)
+    }
 
 }

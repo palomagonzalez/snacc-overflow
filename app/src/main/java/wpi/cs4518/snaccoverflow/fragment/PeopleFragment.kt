@@ -1,3 +1,5 @@
+package wpi.cs4518.snaccoverflow.fragment
+
 import android.graphics.Insets.add
 import android.os.Bundle
 import android.view.LayoutInflater
