@@ -1,6 +1,10 @@
 package wpi.cs4518.snaccoverflow.fragment
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -9,13 +13,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
 import wpi.cs4518.snaccoverflow.model.Profile
 import wpi.cs4518.snaccoverflow.model.ProfileRepository
 import wpi.cs4518.snaccoverflow.model.ProfileViewModel
+import java.io.File
+import java.io.IOException
 import java.lang.NumberFormatException
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val TAG = "wpi.EditProfile"
 
@@ -31,6 +42,9 @@ class EditProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by viewModels()
 
+    private lateinit var currentPhotoPath: String
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -41,8 +55,9 @@ class EditProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        loadCurrentProfile()
+        loadCurrentProfile(view)
         setupEditTextHandlers(view)
+        setupCameraButton(view)
         return view
     }
 
@@ -53,6 +68,40 @@ class EditProfileFragment : Fragment() {
             viewModel.save()
         }.start()
         Toast.makeText(context, "Saved Profile!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupCameraButton(view: View) {
+        val button =
+            view.findViewById<ImageButton>(R.id.buttonTakeProfilePicture).setOnClickListener {
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { photoIntent ->
+                    val photoFile: File? = try {
+                        createImageFile()
+                    } catch (ex: IOException) {
+                        Log.d(TAG, "ERROR CREATING FILE: $ex")
+                        null
+                    }
+                    Log.d(TAG, "Saving image to ${photoFile?.absolutePath}")
+                    photoFile?.also {
+                        val photoURI = FileProvider.getUriForFile(
+                            requireContext(),
+                            "wpi.cs4518.snaccoverflow.fileprovider",
+                            it
+                        )
+                        Log.d(TAG, "$photoURI")
+                        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(photoIntent, id)
+                    }
+                }
+            }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
+        }
     }
 
     private fun setupEditTextHandlers(view: View) {
@@ -80,11 +129,11 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun loadCurrentProfile() {
+    private fun loadCurrentProfile(view: View) {
         viewModel.profile.observe(
             viewLifecycleOwner,
             {
-                profile -> updateUI(profile)
+                profile -> updateUI(view, profile)
             }
         )
     }
@@ -107,16 +156,20 @@ class EditProfileFragment : Fragment() {
         viewModel.profile.value?.answerThree = answerThree
     }
 
-    private fun updateUI(profile: Profile) {
-        val infoLabel = view?.findViewById<EditText>(R.id.labelEditInfo)
-        val answerOneLabel = view?.findViewById<EditText>(R.id.labelEditAnswerOne)
-        val answerTwoLabel = view?.findViewById<EditText>(R.id.labelEditAnswerTwo)
-        val answerThreeLabel = view?.findViewById<EditText>(R.id.labelEditAnswerThree)
+    private fun updateUI(view: View, profile: Profile) {
+        val infoLabel = view.findViewById<EditText>(R.id.labelEditInfo)
+        val answerOneLabel = view.findViewById<EditText>(R.id.labelEditAnswerOne)
+        val answerTwoLabel = view.findViewById<EditText>(R.id.labelEditAnswerTwo)
+        val answerThreeLabel = view.findViewById<EditText>(R.id.labelEditAnswerThree)
         infoLabel?.setText("${profile.name}, ${profile.age}")
         answerOneLabel?.setText(profile.answerOne)
         answerTwoLabel?.setText(profile.answerTwo)
         answerThreeLabel?.setText(profile.answerThree)
 
+    }
+
+    private fun setProfileImage(view: View, bitmap: Bitmap) {
+        view.findViewById<ImageView>(R.id.imageEditProfile).setImageBitmap(bitmap)
     }
 
 }

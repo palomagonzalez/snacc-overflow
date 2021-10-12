@@ -42,7 +42,7 @@ class ProfileFragment : Fragment() {
             transitionToFragment(fragment)
         }
         // Edit Preferences Button
-        view.findViewById<ImageButton>(R.id.buttonEditPreferences)?.setOnClickListener {
+        view.findViewById<ImageButton>(R.id.buttonTakeProfilePicture)?.setOnClickListener {
             val fragment = EditPreferencesFragment()
             transitionToFragment(fragment)
         }
