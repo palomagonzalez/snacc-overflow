@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="110dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="110dp"
             app:cardCornerRadius="100dp"
             app:layout_constraintDimensionRatio="1:1"
@@ -98,7 +98,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="90dp"
+            android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
@@ -107,6 +107,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintBottom_toTopOf="@+id/cardQuestionTwo"
             android:id="@+id/cardQuestionOne">
 
 
@@ -145,7 +146,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="90dp"
+            android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
@@ -154,6 +155,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardQuestionOne"
+            app:layout_constraintBottom_toTopOf="@+id/cardQuestionThree"
             android:id="@+id/cardQuestionTwo">
 
 
@@ -191,15 +193,18 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="90dp"
+            android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/cardQuestionThree"
             app:cardBackgroundColor="#eeeeee"
             app:cardCornerRadius="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardQuestionTwo">
+            app:layout_constraintTop_toBottomOf="@+id/cardQuestionTwo"
+            app:layout_constraintBottom_toBottomOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
