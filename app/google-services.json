@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "627507076455",
+    "project_id": "snaccoverflow-9e909",
+    "storage_bucket": "snaccoverflow-9e909.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627507076455:android:0e0b2683db3e2511eaa3c2",
+        "android_client_info": {
+          "package_name": "wpi.cs4518.snaccoverflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627507076455-v3blk2chpihl1q8rlpdu95ueqcbgp3t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM05VE9ma9S7LvrvCFfmFXHqxmxjYnxzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627507076455-v3blk2chpihl1q8rlpdu95ueqcbgp3t5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
