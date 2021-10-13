@@ -18,7 +18,7 @@ class PersonItem(val person: Profile,
     : Item() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        person.name = viewHolder.itemView.findViewById<TextView>(R.id.textView_name).toString()
+        viewHolder.itemView.findViewById<TextView>(R.id.textView_name).text = person.name
     }
 
     override fun getLayout(): Int {
