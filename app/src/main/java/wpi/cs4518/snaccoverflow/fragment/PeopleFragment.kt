@@ -33,8 +33,6 @@ class PeopleFragment : Fragment() {
 
     private lateinit var userListenerRegistration: ListenerRegistration
 
-    private var shouldInitRecyclerView = true
-
     private lateinit var peopleSection: Section
 
     private lateinit var recyclerView: RecyclerView
@@ -52,7 +50,6 @@ class PeopleFragment : Fragment() {
             setOnItemClickListener(onItemClick)
         }
 
-        shouldInitRecyclerView = true
 
         userListenerRegistration =
             FirestoreUtil.addUsersListener(this.requireActivity(), this::updateRecyclerView)

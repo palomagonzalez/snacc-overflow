@@ -10,19 +10,18 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import wpi.cs4518.snaccoverflow.R
 import wpi.cs4518.snaccoverflow.model.Profile
 import kotlinx.android.synthetic.main.item_person.*
+import wpi.cs4518.snaccoverflow.model.TextMessage
 
 class PersonItem(val person: Profile,
                  val userId: String,
                  private val context: Context)
     : Item() {
 
-    public override fun bind(viewHolder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
-        person.name = viewHolder.itemView.findViewById<RecyclerView>(R.id.textView_name).toString()
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        person.name = viewHolder.itemView.findViewById<TextView>(R.id.textView_name).toString()
     }
 
     override fun getLayout(): Int {
-        TODO("Not yet implemented")
-        R.layout.item_person
+        return R.layout.item_person
     }
 }

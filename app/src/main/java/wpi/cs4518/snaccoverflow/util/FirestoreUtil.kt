@@ -8,10 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.xwray.groupie.kotlinandroidextensions.Item
-import wpi.cs4518.snaccoverflow.model.ChatChannel
-import wpi.cs4518.snaccoverflow.model.Message
-import wpi.cs4518.snaccoverflow.model.TextMessage
-import wpi.cs4518.snaccoverflow.model.Profile
+import wpi.cs4518.snaccoverflow.model.*
 import wpi.cs4518.snaccoverflow.recyclerview.item.PersonItem
 import wpi.cs4518.snaccoverflow.recyclerview.item.TextMessageItem
 
@@ -34,8 +31,11 @@ object FirestoreUtil {
             if (!documentSnapshot.exists()) {
                 val newUser = Profile(
                     0, FirebaseAuth.getInstance().currentUser?.displayName ?: "",
-                    0, "", "", ""
+                    18, "", "", "", null
                 )
+                Thread{
+                    ProfileRepository.get().saveProfile(newUser)
+                }.start()
                 currentUserDocRef.set(newUser).addOnSuccessListener {
                     onComplete()
                 }

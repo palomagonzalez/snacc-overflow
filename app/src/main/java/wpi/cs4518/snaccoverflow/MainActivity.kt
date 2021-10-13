@@ -43,11 +43,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        val context = this
-        Thread {
-            ProfileRepository.init(context)
-        }.start()
-
         Log.d(TAG, "Created MainActivity")
     }
 
