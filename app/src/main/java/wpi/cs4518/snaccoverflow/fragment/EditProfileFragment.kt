@@ -23,6 +23,7 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import org.jetbrains.anko.runOnUiThread
 import wpi.cs4518.snaccoverflow.R
 import wpi.cs4518.snaccoverflow.helpers.ImageUtils
 import wpi.cs4518.snaccoverflow.model.Profile
@@ -52,6 +53,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var currentPhotoPath: String
 
     private lateinit var locationManager: LocationManager
+
+    private var loadedProfile = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,7 +185,10 @@ class EditProfileFragment : Fragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                saveCurrentProfile()
+                if (loadedProfile) {
+                    saveCurrentProfile()
+                }
+
             }
         }
         val ids = arrayOf(
@@ -201,6 +207,7 @@ class EditProfileFragment : Fragment() {
             viewLifecycleOwner,
             {
                 profile -> updateUI(view, profile)
+                loadedProfile = true
             }
         )
     }
@@ -224,16 +231,20 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun updateUI(view: View, profile: Profile) {
-        val infoLabel = view.findViewById<EditText>(R.id.labelEditInfo)
-        val answerOneLabel = view.findViewById<EditText>(R.id.labelEditAnswerOne)
-        val answerTwoLabel = view.findViewById<EditText>(R.id.labelEditAnswerTwo)
-        val answerThreeLabel = view.findViewById<EditText>(R.id.labelEditAnswerThree)
-        infoLabel?.setText("${profile.name}, ${profile.age}")
-        answerOneLabel?.setText(profile.answerOne)
-        answerTwoLabel?.setText(profile.answerTwo)
-        answerThreeLabel?.setText(profile.answerThree)
-        if (profile.profilePictureLocation != null) {
-            setProfileImage(view, ImageUtils.getImage(profile.profilePictureLocation.toString()))
+        requireContext().runOnUiThread {
+            Log.d(TAG, "Loading profile: \n$profile")
+            val infoLabel = view.findViewById<EditText>(R.id.labelEditInfo)
+            val answerOneLabel = view.findViewById<EditText>(R.id.labelEditAnswerOne)
+            val answerTwoLabel = view.findViewById<EditText>(R.id.labelEditAnswerTwo)
+            val answerThreeLabel = view.findViewById<EditText>(R.id.labelEditAnswerThree)
+            infoLabel?.setText("${profile.name}, ${profile.age}")
+            answerOneLabel?.setText(profile.answerOne, TextView.BufferType.EDITABLE)
+            answerOneLabel.postInvalidate()
+            answerTwoLabel?.setText(profile.answerTwo, TextView.BufferType.EDITABLE)
+            answerThreeLabel?.setText(profile.answerThree, TextView.BufferType.EDITABLE)
+            if (profile.profilePictureLocation != null) {
+                setProfileImage(view, ImageUtils.getImage(profile.profilePictureLocation.toString()))
+            }
         }
     }
 
