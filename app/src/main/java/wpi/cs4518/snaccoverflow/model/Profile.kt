@@ -3,8 +3,6 @@ package wpi.cs4518.snaccoverflow.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-//maybe make a data class?
-
 @Entity(tableName = "profiles")
 class Profile(
     @PrimaryKey val id: Int = 0,
@@ -12,7 +10,19 @@ class Profile(
     var age: Int,
     var answerOne: String,
     var answerTwo: String,
-    var answerThree: String
+    var answerThree: String,
+    var profilePictureLocation: String?
 ) {
-    constructor():this(0,"", 0,"","", "")
+    constructor():this(0,"", 0,"","", "", null)
+
+    override fun toString(): String {
+        return "{\n" +
+                "\tname: $name\n" +
+                "\tage: $age\n" +
+                "\tanswer_one: $answerOne\n" +
+                "\tanswer_two: $answerTwo\n" +
+                "\tanswer_three: $answerThree\n" +
+                "\tprofile_picture: $profilePictureLocation\n" +
+                "}"
+    }
 }

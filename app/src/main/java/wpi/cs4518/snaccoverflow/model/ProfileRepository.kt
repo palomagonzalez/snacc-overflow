@@ -1,6 +1,7 @@
 package wpi.cs4518.snaccoverflow.model
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -15,23 +16,26 @@ class ProfileRepository private constructor(context: Context){
         context.applicationContext,
         ProfileDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     private val dao = database.profileDAO()
 
     init {
         if (!dao.doesProfileExist()) {
+            Log.d(TAG, "No Profile Found, Setting Up New One")
             dao.setInitialProfile()
         }
         Log.d(TAG, "Initialized")
     }
 
     fun getProfile(): LiveData<Profile> {
-        return dao.loadProfile()
+        val profile = dao.loadProfile()
+        return profile
     }
 
     fun saveProfile(profile: Profile) {
-        dao.saveProfile(profile.name, profile.age, profile.answerOne, profile.answerTwo, profile.answerThree)
+        Log.d(TAG, "Saving Profile:\n $profile")
+        dao.saveProfile(profile.name, profile.age, profile.answerOne, profile.answerTwo, profile.answerThree, profile.profilePictureLocation)
     }
 
     companion object {
@@ -50,7 +54,11 @@ class ProfileRepository private constructor(context: Context){
 
     }
 
-    @Database(entities = [Profile::class], version = 1)
+    @Database(
+        entities = [Profile::class],
+        version = 6
+    )
+    @TypeConverters(ProfileConverter::class)
     abstract class ProfileDatabase: RoomDatabase() {
 
         abstract fun profileDAO(): ProfileDAO
@@ -60,7 +68,7 @@ class ProfileRepository private constructor(context: Context){
     @Dao
     interface ProfileDAO {
 
-        @Query("insert into profiles (id, name, age, answerOne, answerTwo, answerThree) values (0, 'Your Name', 21, 'Kotlin', 'Android Studio', 'Laurie Leshin')")
+        @Query("insert into profiles (id, name, age, answerOne, answerTwo, answerThree, profilePictureLocation) values (0, 'Your Name', 21, 'Kotlin', 'Android Studio', 'Laurie Leshin', null)")
         fun setInitialProfile()
 
         @Query("SELECT EXISTS(SELECT 1 FROM profiles)")
@@ -69,9 +77,24 @@ class ProfileRepository private constructor(context: Context){
         @Query("select * from profiles limit 1")
         fun loadProfile(): LiveData<Profile>
 
-        @Query("update profiles set name=:name, age=:age, answerOne=:answerOne, answerTwo=:answerTwo, answerThree=:answerThree where id=0")
-        fun saveProfile(name: String, age: Int, answerOne: String, answerTwo: String, answerThree: String)
+        @Query("update profiles set name=:name, age=:age, answerOne=:answerOne, answerTwo=:answerTwo, answerThree=:answerThree, profilePictureLocation=:profilePictureLocation where id=0")
+        fun saveProfile(name: String, age: Int, answerOne: String, answerTwo: String, answerThree: String, profilePictureLocation: String?)
 
+    }
+
+    class ProfileConverter {
+        @TypeConverter
+        fun fromUri(uri: Uri?): String? {
+            return uri?.toString()
+        }
+
+        @TypeConverter
+        fun toUri(uri: String?): Uri? {
+            if (uri != null) {
+                return Uri.parse(uri)
+            }
+            return null
+        }
     }
 
 }

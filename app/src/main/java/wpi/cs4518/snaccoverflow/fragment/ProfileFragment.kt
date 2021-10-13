@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
+import wpi.cs4518.snaccoverflow.helpers.ImageUtils
 import wpi.cs4518.snaccoverflow.model.ProfileViewModel
 
 private const val TAG = "wpi.ProfileFragment"
@@ -42,7 +44,7 @@ class ProfileFragment : Fragment() {
             transitionToFragment(fragment)
         }
         // Edit Preferences Button
-        view.findViewById<ImageButton>(R.id.buttonEditPreferences)?.setOnClickListener {
+        view.findViewById<ImageButton>(R.id.buttonTakeProfilePicture)?.setOnClickListener {
             val fragment = EditPreferencesFragment()
             transitionToFragment(fragment)
         }
@@ -50,7 +52,13 @@ class ProfileFragment : Fragment() {
         viewModel.profile.observe(
             viewLifecycleOwner,
             {
-                profile -> view.findViewById<TextView>(R.id.labelProfileViewInfo).text = "${profile.name}, ${profile.age}"
+                profile ->
+                view.findViewById<TextView>(R.id.labelProfileViewInfo).text = "${profile.name}, ${profile.age}"
+                if (profile.profilePictureLocation != null) {
+                    view.findViewById<ImageView>(R.id.imageProfile).setImageBitmap(ImageUtils.getImage(
+                        profile.profilePictureLocation!!
+                    ))
+                }
             }
         )
         return view
