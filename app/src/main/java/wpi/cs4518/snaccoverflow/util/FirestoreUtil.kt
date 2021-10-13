@@ -129,16 +129,14 @@ object FirestoreUtil {
                     return@addSnapshotListener
                 }
                 val items = mutableListOf<Item>()
-                if (querySnapshot != null) {
-                    querySnapshot.documents.forEach {
-                        if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
-                            it.toObject(Profile::class.java)
-                                ?.let { it1 -> PersonItem(it1, it.id, context) }?.let { it2 ->
-                                    items.add(it2)
-                                }
-                    }
+                querySnapshot?.documents?.forEach {
+                    if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
+                        it.toObject(Profile::class.java)
+                            ?.let { it1 -> PersonItem(it1, it.id, context) }?.let { it2 ->
+                                items.add(it2)
+                            }
                 }
-
+                onListen(items)
             }
     }
 

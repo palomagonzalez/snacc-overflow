@@ -8,6 +8,7 @@ android {
     compileSdk 30
 
     defaultConfig {
+
         applicationId "wpi.cs4518.snaccoverflow"
         minSdk 21
         targetSdk 30
@@ -114,8 +115,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
     //groupie
-    implementation 'com.xwray:groupie:2.8.0'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.8.0'
+    implementation 'com.xwray:groupie:2.0.3'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
 
     apply plugin: "com.google.gms.google-services"
     apply plugin: 'kotlin-kapt'

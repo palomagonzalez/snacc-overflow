@@ -2,6 +2,7 @@ package wpi.cs4518.snaccoverflow.fragment
 
 import android.graphics.Insets.add
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +21,13 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.fragment_people.*
 import org.jetbrains.anko.support.v4.startActivity
 import wpi.cs4518.snaccoverflow.model.ProfileRepository.Companion.init
 
+
+private const val TAG = "wpi.PeopleFragment"
 
 class PeopleFragment : Fragment() {
 
@@ -34,42 +37,38 @@ class PeopleFragment : Fragment() {
 
     private lateinit var peopleSection: Section
 
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        val view = inflater.inflate(R.layout.fragment_people, container, false)
+
+        recyclerView = view.findViewById(R.id.recycler_view_people)
+        recyclerView.layoutManager = LinearLayoutManager(this@PeopleFragment.context)
+        recyclerView.adapter = GroupAdapter<ViewHolder>().apply {
+            peopleSection = Section(listOf<Item>())
+            add(peopleSection)
+            setOnItemClickListener(onItemClick)
+        }
+
+        shouldInitRecyclerView = true
 
         userListenerRegistration =
             FirestoreUtil.addUsersListener(this.requireActivity(), this::updateRecyclerView)
 
-        return inflater.inflate(R.layout.fragment_people, container, false)
+        return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         FirestoreUtil.removeListener(userListenerRegistration)
-        shouldInitRecyclerView = true
+
     }
 
     private fun updateRecyclerView(items: List<Item>) {
-
-        fun init() {
-            recycler_view_people.apply {
-                layoutManager = LinearLayoutManager(this@PeopleFragment.context)
-                adapter = GroupAdapter<GroupieViewHolder>().apply {
-                    peopleSection = Section(items)
-                    add(peopleSection)
-                    setOnItemClickListener(onItemClick)
-                }
-            }
-            shouldInitRecyclerView = false
-        }
-
-        fun updateItems() = peopleSection.update(items)
-
-        if (shouldInitRecyclerView)
-            init()
-        else
-            updateItems()
-
+        Log.d(TAG, "Updating view with ${items.size} messages")
+        peopleSection.update(items)
     }
 
     private val onItemClick = OnItemClickListener { item, view ->

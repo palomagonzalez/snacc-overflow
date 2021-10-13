@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.messaging.Constants
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import wpi.cs4518.snaccoverflow.util.FirestoreUtil
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -53,7 +53,7 @@ class ChatActivity : AppCompatActivity() {
         fun init() {
             recycler_view_messages.apply {
                 layoutManager = LinearLayoutManager(this@ChatActivity)
-                adapter = GroupAdapter<GroupieViewHolder>().apply {
+                adapter = GroupAdapter<ViewHolder>().apply {
                     messagesSection = Section(messages)
                     this.add(messagesSection)
                 }
