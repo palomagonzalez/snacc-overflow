@@ -11,6 +11,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import wpi.cs4518.snaccoverflow.model.*
 import wpi.cs4518.snaccoverflow.recyclerview.item.PersonItem
 import wpi.cs4518.snaccoverflow.recyclerview.item.TextMessageItem
+import java.util.*
 
 object FirestoreUtil {
     private val firestoreInstance: FirebaseFirestore by lazy {
@@ -42,6 +43,10 @@ object FirestoreUtil {
             } else
                 onComplete()
         }
+    }
+
+    fun saveUser(profile: Profile) {
+        firestoreInstance.collection("users").document(UUID.randomUUID().toString()).set(profile)
     }
 
     fun updateCurrentUser(

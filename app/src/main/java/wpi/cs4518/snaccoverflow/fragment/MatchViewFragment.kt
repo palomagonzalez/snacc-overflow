@@ -10,6 +10,7 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.viewModels
 import wpi.cs4518.snaccoverflow.R
 import wpi.cs4518.snaccoverflow.model.MatchListViewModel
+import wpi.cs4518.snaccoverflow.util.FirestoreUtil
 import java.util.*
 
 private const val TAG = "wpi.MatchViewFragment"
@@ -26,6 +27,8 @@ class MatchViewFragment : Fragment() {
     private lateinit var gestureDetector: GestureDetectorCompat
 
     private lateinit var toast: Toast
+
+    private lateinit var currentMatch: MatchListViewModel.Match
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +72,7 @@ class MatchViewFragment : Fragment() {
             viewLifecycleOwner,
             {
                 match -> updateUI(match)
+                currentMatch = match
             }
         )
     }
@@ -79,11 +83,11 @@ class MatchViewFragment : Fragment() {
         val ans1Label = view?.findViewById<TextView>(R.id.labelMatchAnswerOne)
         val ans2Label = view?.findViewById<TextView>(R.id.labelMatchAnswerTwo)
         val ans3Label = view?.findViewById<TextView>(R.id.labelMatchAnswerThree)
-        infoLabel?.text = "${match.name}, ${match.age}"
+        infoLabel?.text = "${match.profile.name}, ${match.profile.age}"
         locationLabel?.text = match.location
-        ans1Label?.text = match.answerOne
-        ans2Label?.text = match.answerTwo
-        ans3Label?.text = match.answerThree
+        ans1Label?.text = match.profile.answerOne
+        ans2Label?.text = match.profile.answerTwo
+        ans3Label?.text = match.profile.answerThree
     }
 
     private fun onSwipeLeft() {
@@ -93,6 +97,7 @@ class MatchViewFragment : Fragment() {
 
     private fun onSwipeRight() {
         writeToast("I Can Overlook That")
+        FirestoreUtil.saveUser(currentMatch.profile)
         loadNextMatch()
     }
 
@@ -102,7 +107,9 @@ class MatchViewFragment : Fragment() {
         toast.show()
     }
 
-    private inner class MatchGestureListener(val onSwipeLeft:()->Unit, val onSwipeRight:()->Unit):
+    private inner class MatchGestureListener(
+        val onSwipeLeft:()->Unit,
+        val onSwipeRight:()->Unit):
         GestureDetector.SimpleOnGestureListener() {
 
         private val SWIPE_THRESHOLD = 100

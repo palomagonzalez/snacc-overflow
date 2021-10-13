@@ -8,16 +8,9 @@ import java.util.*
 class MatchListViewModel : ViewModel() {
 
     data class Match(
-        val id: Int,
-        val name: String,
-        val age: Int,
-        val location: String,
-        val answerOne: String,
-        val answerTwo: String,
-        val answerThree: String
+        val profile: Profile,
+        val location: String
     )
-
-    private var id = 0
 
 
     private val currentMatch: MutableLiveData<Match> by lazy {
@@ -39,13 +32,15 @@ class MatchListViewModel : ViewModel() {
 
     private fun randomMatch(): Match {
         val rng = Random()
+        val id = rng.nextInt()
         val name = NAMES[rng.nextInt(NAMES.size)]
         val age = rng.nextInt(52) + 18
         val location = LOCATIONS[rng.nextInt(LOCATIONS.size)]
         val ans1 = LANGS[rng.nextInt(LANGS.size)]
         val ans2 = IDES[rng.nextInt(IDES.size)]
         val ans3 = CELEB[rng.nextInt(CELEB.size)]
-        return Match(id++, name, age, location, ans1, ans2, ans3)
+        val profile = Profile(id, name, age, ans1, ans2, ans3, null)
+        return Match(profile, location)
     }
 
 }

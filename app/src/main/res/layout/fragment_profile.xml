@@ -36,9 +36,9 @@
             android:id="@+id/cardView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="150dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="250dp"
+            android:layout_marginEnd="150dp"
             app:cardBackgroundColor="#eeeeee"
             app:cardCornerRadius="75dp"
             app:layout_constraintDimensionRatio="1:1"
@@ -55,50 +55,14 @@
                 android:src="@drawable/ic_baseline_settings_24" />
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="250dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="50dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:cardCornerRadius="75dp"
-            app:cardBackgroundColor="#eeeeee">
-
-            <ImageButton
-                android:id="@+id/buttonTakeProfilePicture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_baseline_edit_location_24"
-                android:scaleType="fitXY"
-                android:background="#eeeeee"/>
-        </androidx.cardview.widget.CardView>
-
         <TextView
             android:id="@+id/textView3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="125dp"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="225dp"
+            android:layout_marginEnd="125dp"
             android:text="Edit Profile"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="20dp"
-            android:text="Edit Preferences"
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
